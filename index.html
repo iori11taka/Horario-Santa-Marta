@@ -510,8 +510,6 @@
       deleteDoc,
       doc,
       onSnapshot,
-      query,
-      orderBy,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -583,10 +581,7 @@
     }
 
     function startRealtimeListeners() {
-      const activitiesQuery = query(collection(db, "activities"), orderBy("day", "asc"), orderBy("time", "asc"));
-      const recommendationsQuery = query(collection(db, "recommendations"), orderBy("votes", "desc"));
-
-      onSnapshot(activitiesQuery, (snapshot) => {
+      onSnapshot(collection(db, "activities"), (snapshot) => {
         activities = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
         render();
       }, (error) => {
@@ -595,7 +590,7 @@
         showToast("Error leyendo actividades. Revisa Rules o índice.");
       });
 
-      onSnapshot(recommendationsQuery, (snapshot) => {
+      onSnapshot(collection(db, "recommendations"), (snapshot) => {
         recommendations = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
         render();
       }, (error) => {
