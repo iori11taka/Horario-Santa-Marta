@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Santa Marta Planner Pro</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --card: rgba(255, 255, 255, 0.09);
+      --card-strong: rgba(255, 255, 255, 0.14);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --line: rgba(255, 255, 255, 0.14);
+      --blue: #38bdf8;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --red: #fb7185;
+      --shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        linear-gradient(rgba(7, 17, 31, 0.25), rgba(7, 17, 31, 0.92)),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80") center/cover fixed;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app {
+      width: min(1380px, 94vw);
+      margin: auto;
+      padding: 28px 0 50px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      padding: 34px;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.24), rgba(34, 197, 94, 0.12)), rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 270px;
+      height: 270px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.2);
+      right: -70px;
+      top: -90px;
+      filter: blur(8px);
+    }
+
+    .hero-top {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 0.96;
+      letter-spacing: -2px;
+      max-width: 760px;
+    }
+
+    .hero p {
+      max-width: 790px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 18px;
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-weight: 800;
+      color: #06101e;
+      background: var(--blue);
+      transition: transform 0.2s, opacity 0.2s, background 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn.secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid var(--line);
+    }
+
+    .btn.green {
+      background: var(--green);
+    }
+
+    .btn.red {
+      background: var(--red);
+      color: white;
+    }
+
+    .stats {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(130px, 1fr));
+      gap: 12px;
+      min-width: min(420px, 100%);
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .stat strong {
+      font-size: 26px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(5, 13, 25, 0.72);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .panel-head h2 {
+      font-size: 18px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 12px 13px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    select option {
+      background: #0f172a;
+    }
+
+    .days {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .day-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.075);
+      overflow: hidden;
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .day-title strong {
+      font-size: 17px;
+    }
+
+    .day-title small {
+      display: block;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      white-space: nowrap;
+    }
+
+    .activity-list {
+      padding: 14px 16px 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .activity {
+      display: grid;
+      grid-template-columns: 76px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .time {
+      font-weight: 900;
+      color: var(--blue);
+    }
+
+    .activity h3 {
+      font-size: 15px;
+      margin-bottom: 3px;
+    }
+
+    .activity p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.11);
+      border: 1px solid var(--line);
+    }
+
+    .side-content {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rec-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .rec-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .rec-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .rec-card h3 {
+      font-size: 15px;
+    }
+
+    .rec-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .vote {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(250, 204, 21, 0.12);
+      color: var(--yellow);
+      border: 1px solid rgba(250, 204, 21, 0.25);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .rec-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .small-btn {
+      border-radius: 12px;
+      padding: 9px 10px;
+      font-weight: 800;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--line);
+    }
+
+    .small-btn.primary {
+      color: #06101e;
+      background: var(--blue);
+    }
+
+    .small-btn.green {
+      color: #06101e;
+      background: var(--green);
+    }
+
+    .empty {
+      padding: 18px;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(8px);
+      z-index: 50;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(560px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: #0b1526;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .modal-card h2 {
+      margin-bottom: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      transition: 0.25s;
+      background: rgba(15, 23, 42, 0.96);
+      color: white;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      z-index: 80;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 22px;
+        border-radius: 26px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .activity {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-actions {
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="badge">🌴 Viaje familiar · 16 al 23 de mayo · Santa Marta</div>
+          <h1>Planner interactivo para Santa Marta</h1>
+          <p>
+            Organiza el horario del viaje, agrega recomendaciones familiares y conviértelas en actividades oficiales del itinerario.
+            Todo se guarda en este navegador mediante localStorage, ideal para probar en VS Code y subir a GitHub/Vercel.
+          </p>
+          <div class="hero-actions">
+            <button class="btn" onclick="openActivityModal()">＋ Agregar actividad</button>
+            <button class="btn secondary" onclick="openRecommendationModal()">💡 Recomendar plan</button>
+            <button class="btn secondary" onclick="exportData()">⬇ Exportar JSON</button>
+            <button class="btn red" onclick="resetPlanner()">Reiniciar</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><span>Días de viaje</span><strong id="statDays">8</strong></div>
+          <div class="stat"><span>Actividades</span><strong id="statActivities">0</strong></div>
+          <div class="stat"><span>Recomendaciones</span><strong id="statRecommendations">0</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>📅 Horario interactivo</h2>
+          <div class="filters">
+            <select id="dayFilter" onchange="render()">
+              <option value="all">Todos los días</option>
+            </select>
+          </div>
+        </div>
+        <div class="days" id="daysContainer"></div>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-head">
+          <h2>💡 Recomendaciones</h2>
+          <button class="small-btn primary" onclick="openRecommendationModal()">＋ Nueva</button>
+        </div>
+        <div class="side-content">
+          <select id="recFilter" onchange="render()">
+            <option value="all">Todas</option>
+            <option value="pending">Pendientes</option>
+            <option value="added">Ya agregadas</option>
+          </select>
+          <div class="rec-list" id="recommendationsContainer"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="modal" id="activityModal">
+    <div class="modal-card">
+      <h2 id="activityModalTitle">Agregar actividad</h2>
+      <div class="form-grid">
+        <select id="activityDay"></select>
+        <input id="activityTime" type="time" />
+        <input id="activityTitle" placeholder="Título de la actividad" />
+        <textarea id="activityNotes" placeholder="Notas, lugar, costo aproximado, qué llevar, etc."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn secondary" onclick="closeActivityModal()">Cancelar</button>
+        <button class="btn green" onclick="saveActivity()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="recommendationModal">
+    <div class="modal-card">
+      <h2>Nueva recomendación</h2>
+      <div class="form-grid">
+        <input id="recName" placeholder="Nombre de quien recomienda" />
+        <input id="recTitle" placeholder="Ej: Playa Cristal, Parque Tayrona, cena frente al mar" />
+        <textarea id="recNotes" placeholder="¿Por qué recomiendas este plan?"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn secondary" onclick="closeRecommendationModal()">Cancelar</button>
+        <button class="btn green" onclick="saveRecommendation()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const tripDays = [
+      { id: "2026-05-16", label: "Sábado 16", subtitle: "Llegada aprox. 8:00 pm", limited: true },
+      { id: "2026-05-17", label: "Domingo 17", subtitle: "Día completo" },
+      { id: "2026-05-18", label: "Lunes 18", subtitle: "Día completo" },
+      { id: "2026-05-19", label: "Martes 19", subtitle: "Día completo" },
+      { id: "2026-05-20", label: "Miércoles 20", subtitle: "Día completo" },
+      { id: "2026-05-21", label: "Jueves 21", subtitle: "Día completo" },
+      { id: "2026-05-22", label: "Viernes 22", subtitle: "Último día completo" },
+      { id: "2026-05-23", label: "Sábado 23", subtitle: "Vuelo 3:00 pm, aprovechar solo mañana", limited: true }
+    ];
+
+    const defaultActivities = [
+      {
+        id: crypto.randomUUID(),
+        day: "2026-05-16",
+        time: "20:00",
+        title: "Llegada a Santa Marta",
+        notes: "Check-in, cena tranquila cerca del hospedaje y descanso."
+      },
+      {
+        id: crypto.randomUUID(),
+        day: "2026-05-17",
+        time: "09:00",
+        title: "Mañana de playa suave",
+        notes: "Primer día para adaptarse, caminar y revisar opciones reales con la familia."
+      },
+      {
+        id: crypto.randomUUID(),
+        day: "2026-05-23",
+        time: "09:00",
+        title: "Desayuno + maletas",
+        notes: "Plan corto. Dejar margen para traslado al aeropuerto por el vuelo de 3:00 pm."
+      }
+    ];
+
+    let activities = JSON.parse(localStorage.getItem("sm_activities")) || defaultActivities;
+    let recommendations = JSON.parse(localStorage.getItem("sm_recommendations")) || [
+      {
+        id: crypto.randomUUID(),
+        name: "Idea base",
+        title: "Paseo por el centro histórico",
+        notes: "Bueno para una tarde/noche tranquila, fotos y cena familiar.",
+        votes: 2,
+        added: false
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "Idea base",
+        title: "Playa o paseo en lancha",
+        notes: "Ideal para uno de los días completos. Validar clima y disponibilidad.",
+        votes: 3,
+        added: false
+      }
+    ];
+
+    let editingActivityId = null;
+    let recommendationToScheduleId = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    function saveState() {
+      localStorage.setItem("sm_activities", JSON.stringify(activities));
+      localStorage.setItem("sm_recommendations", JSON.stringify(recommendations));
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function initSelects() {
+      const dayFilter = $("dayFilter");
+      const activityDay = $("activityDay");
+
+      tripDays.forEach(day => {
+        const opt1 = document.createElement("option");
+        opt1.value = day.id;
+        opt1.textContent = day.label;
+        dayFilter.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = day.id;
+        opt2.textContent = `${day.label} · ${day.subtitle}`;
+        activityDay.appendChild(opt2);
+      });
+    }
+
+    function render() {
+      renderStats();
+      renderDays();
+      renderRecommendations();
+      saveState();
+    }
+
+    function renderStats() {
+      $("statDays").textContent = tripDays.length;
+      $("statActivities").textContent = activities.length;
+      $("statRecommendations").textContent = recommendations.length;
+    }
+
+    function renderDays() {
+      const selectedDay = $("dayFilter").value;
+      const container = $("daysContainer");
+      container.innerHTML = "";
+
+      const visibleDays = selectedDay === "all" ? tripDays : tripDays.filter(day => day.id === selectedDay);
+
+      visibleDays.forEach(day => {
+        const dayActivities = activities
+          .filter(activity => activity.day === day.id)
+          .sort((a, b) => a.time.localeCompare(b.time));
+
+        const card = document.createElement("article");
+        card.className = "day-card";
+
+        card.innerHTML = `
+          <div class="day-header">
+            <div class="day-title">
+              <strong>${day.label}</strong>
+              <small>${day.subtitle}</small>
+            </div>
+            <span class="pill">${dayActivities.length} actividad(es)</span>
+          </div>
+          <div class="activity-list">
+            ${dayActivities.length ? dayActivities.map(activity => activityTemplate(activity)).join("") : `<div class="empty">Todavía no hay actividades para este día.</div>`}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function activityTemplate(activity) {
+      return `
+        <div class="activity">
+          <div class="time">${activity.time || "--:--"}</div>
+          <div>
+            <h3>${escapeHTML(activity.title)}</h3>
+            <p>${escapeHTML(activity.notes || "Sin notas")}</p>
+          </div>
+          <div class="mini-actions">
+            <button class="icon-btn" title="Editar" onclick="editActivity('${activity.id}')">✎</button>
+            <button class="icon-btn" title="Eliminar" onclick="deleteActivity('${activity.id}')">×</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRecommendations() {
+      const filter = $("recFilter").value;
+      const container = $("recommendationsContainer");
+      container.innerHTML = "";
+
+      let list = [...recommendations].sort((a, b) => b.votes - a.votes);
+
+      if (filter === "pending") list = list.filter(rec => !rec.added);
+      if (filter === "added") list = list.filter(rec => rec.added);
+
+      if (!list.length) {
+        container.innerHTML = `<div class="empty">No hay recomendaciones en este filtro.</div>`;
+        return;
+      }
+
+      list.forEach(rec => {
+        const card = document.createElement("article");
+        card.className = "rec-card";
+        card.innerHTML = `
+          <div class="rec-top">
+            <div>
+              <h3>${escapeHTML(rec.title)}</h3>
+              <p>${escapeHTML(rec.notes || "Sin descripción")}</p>
+              <p><strong>Por:</strong> ${escapeHTML(rec.name || "Anónimo")}</p>
+            </div>
+            <button class="vote" onclick="voteRecommendation('${rec.id}')">★ ${rec.votes}</button>
+          </div>
+          <div class="rec-actions">
+            <button class="small-btn primary" onclick="scheduleRecommendation('${rec.id}')">Agregar al horario</button>
+            <button class="small-btn" onclick="deleteRecommendation('${rec.id}')">Eliminar</button>
+            ${rec.added ? `<span class="pill">Ya agregada</span>` : ``}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openActivityModal(prefill = {}) {
+      editingActivityId = prefill.id || null;
+      $("activityModalTitle").textContent = editingActivityId ? "Editar actividad" : "Agregar actividad";
+      $("activityDay").value = prefill.day || "2026-05-17";
+      $("activityTime").value = prefill.time || "09:00";
+      $("activityTitle").value = prefill.title || "";
+      $("activityNotes").value = prefill.notes || "";
+      $("activityModal").classList.add("show");
+    }
+
+    function closeActivityModal() {
+      editingActivityId = null;
+      recommendationToScheduleId = null;
+      $("activityModal").classList.remove("show");
+    }
+
+    function saveActivity() {
+      const day = $("activityDay").value;
+      const time = $("activityTime").value;
+      const title = $("activityTitle").value.trim();
+      const notes = $("activityNotes").value.trim();
+
+      if (!title) {
+        showToast("Agrega un título para la actividad.");
+        return;
+      }
+
+      if (editingActivityId) {
+        activities = activities.map(activity => activity.id === editingActivityId ? { ...activity, day, time, title, notes } : activity);
+        showToast("Actividad actualizada.");
+      } else {
+        activities.push({ id: crypto.randomUUID(), day, time, title, notes });
+        showToast("Actividad agregada al horario.");
+      }
+
+      if (recommendationToScheduleId) {
+        recommendations = recommendations.map(rec => rec.id === recommendationToScheduleId ? { ...rec, added: true } : rec);
+      }
+
+      closeActivityModal();
+      render();
+    }
+
+    function editActivity(id) {
+      const activity = activities.find(item => item.id === id);
+      if (activity) openActivityModal(activity);
+    }
+
+    function deleteActivity(id) {
+      if (!confirm("¿Eliminar esta actividad?")) return;
+      activities = activities.filter(activity => activity.id !== id);
+      render();
+      showToast("Actividad eliminada.");
+    }
+
+    function openRecommendationModal() {
+      $("recName").value = "";
+      $("recTitle").value = "";
+      $("recNotes").value = "";
+      $("recommendationModal").classList.add("show");
+    }
+
+    function closeRecommendationModal() {
+      $("recommendationModal").classList.remove("show");
+    }
+
+    function saveRecommendation() {
+      const name = $("recName").value.trim() || "Anónimo";
+      const title = $("recTitle").value.trim();
+      const notes = $("recNotes").value.trim();
+
+      if (!title) {
+        showToast("Agrega un título para la recomendación.");
+        return;
+      }
+
+      recommendations.push({
+        id: crypto.randomUUID(),
+        name,
+        title,
+        notes,
+        votes: 1,
+        added: false
+      });
+
+      closeRecommendationModal();
+      render();
+      showToast("Recomendación guardada.");
+    }
+
+    function voteRecommendation(id) {
+      recommendations = recommendations.map(rec => rec.id === id ? { ...rec, votes: rec.votes + 1 } : rec);
+      render();
+    }
+
+    function scheduleRecommendation(id) {
+      const rec = recommendations.find(item => item.id === id);
+      if (!rec) return;
+
+      recommendationToScheduleId = id;
+      openActivityModal({
+        day: "2026-05-17",
+        time: "10:00",
+        title: rec.title,
+        notes: rec.notes
+      });
+    }
+
+    function deleteRecommendation(id) {
+      if (!confirm("¿Eliminar esta recomendación?")) return;
+      recommendations = recommendations.filter(rec => rec.id !== id);
+      render();
+      showToast("Recomendación eliminada.");
+    }
+
+    function exportData() {
+      const data = {
+        trip: "Santa Marta 2026",
+        days: tripDays,
+        activities,
+        recommendations
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "santa-marta-planner.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("Archivo exportado.");
+    }
+
+    function resetPlanner() {
+      if (!confirm("Esto borrará actividades y recomendaciones guardadas en este navegador. ¿Continuar?")) return;
+      localStorage.removeItem("sm_activities");
+      localStorage.removeItem("sm_recommendations");
+      activities = defaultActivities;
+      recommendations = [];
+      render();
+      showToast("Planner reiniciado.");
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    window.addEventListener("click", (event) => {
+      if (event.target === $("activityModal")) closeActivityModal();
+      if (event.target === $("recommendationModal")) closeRecommendationModal();
+    });
+
+    initSelects();
+    render();
+  </script>
+</body>
+</html>
