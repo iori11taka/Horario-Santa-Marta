@@ -4,11 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Santa Marta Planner Pro Firebase</title>
+
   <style>
     :root {
       --bg: #07111f;
-      --card: rgba(255, 255, 255, 0.09);
-      --card-strong: rgba(255, 255, 255, 0.14);
       --text: #f8fafc;
       --muted: #cbd5e1;
       --line: rgba(255, 255, 255, 0.14);
@@ -122,7 +121,7 @@
       font-weight: 800;
       color: #06101e;
       background: var(--blue);
-      transition: transform 0.2s, opacity 0.2s, background 0.2s;
+      transition: transform 0.2s;
     }
 
     .btn:hover { transform: translateY(-2px); }
@@ -258,10 +257,8 @@
     }
 
     .time { font-weight: 900; color: var(--blue); }
-
     .activity h3 { font-size: 15px; margin-bottom: 3px; }
     .activity p { color: var(--muted); font-size: 13px; line-height: 1.45; }
-
     .mini-actions { display: flex; gap: 6px; }
 
     .icon-btn {
@@ -324,7 +321,6 @@
     }
 
     .small-btn.primary { color: #06101e; background: var(--blue); }
-    .small-btn.green { color: #06101e; background: var(--green); }
 
     .empty {
       padding: 18px;
@@ -424,7 +420,7 @@
             Esta versión usa Firebase Firestore para sincronizar cambios entre celulares en tiempo real.
           </p>
           <div id="firebaseWarning" class="firebase-warning">
-            ⚠️ Falta configurar Firebase. Reemplaza el objeto <strong>firebaseConfig</strong> en el código con el de tu proyecto.
+            ⚠️ Firebase no está conectando. Revisa la configuración, Firestore o las reglas.
           </div>
           <div class="hero-actions">
             <button class="btn" onclick="openActivityModal()">＋ Agregar actividad</button>
@@ -519,24 +515,25 @@
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    /************************************************************
-     * 1) PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE
-     *
-     * Firebase Console > Project settings > General > Your apps
-     * Crea una app Web y copia el objeto firebaseConfig.
-     ************************************************************/
-    // Import the functions you need from the SDKs you need
-
+    // CONFIGURACIÓN DE TU PROYECTO FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRt9B_mVLxCktdjJl2coh0qNYA7DDLw1Y",
+      authDomain: "santa-marta-planner.firebaseapp.com",
+      projectId: "santa-marta-planner",
+      storageBucket: "santa-marta-planner.firebasestorage.app",
+      messagingSenderId: "719694865986",
+      appId: "1:719694865986:web:b7ff8778ffd821b28c6fdb"
+    };
 
     const tripDays = [
-      { id: "2026-05-16", label: "Sábado 16", subtitle: "Llegada aprox. 8:00 pm", limited: true },
+      { id: "2026-05-16", label: "Sábado 16", subtitle: "Llegada aprox. 8:00 pm" },
       { id: "2026-05-17", label: "Domingo 17", subtitle: "Día completo" },
       { id: "2026-05-18", label: "Lunes 18", subtitle: "Día completo" },
       { id: "2026-05-19", label: "Martes 19", subtitle: "Día completo" },
       { id: "2026-05-20", label: "Miércoles 20", subtitle: "Día completo" },
       { id: "2026-05-21", label: "Jueves 21", subtitle: "Día completo" },
       { id: "2026-05-22", label: "Viernes 22", subtitle: "Último día completo" },
-      { id: "2026-05-23", label: "Sábado 23", subtitle: "Vuelo 3:00 pm, aprovechar solo mañana", limited: true }
+      { id: "2026-05-23", label: "Sábado 23", subtitle: "Vuelo 3:00 pm, aprovechar solo mañana" }
     ];
 
     let db = null;
@@ -548,63 +545,11 @@
 
     const $ = (id) => document.getElementById(id);
 
-    function isFirebaseConfigured() {
-      return firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("PEGA_AQUI");
-    }
-
     function showToast(message) {
       const toast = $("toast");
       toast.textContent = message;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2200);
-    }
-
-    function initFirebase() {
-      if (!isFirebaseConfigured()) {
-        $("firebaseWarning").classList.add("show");
-        showToast("Falta configurar Firebase.");
-        render();
-        return;
-      }
-
-      const app = initializeApp(firebaseConfig);
-      db = getFirestore(app);
-      firebaseReady = true;
-      startRealtimeListeners();
-    }
-
-    /************************************************************
-     * 2) LISTENERS EN TIEMPO REAL
-     *
-     * Estos listeners son lo más importante.
-     * Cuando alguien agrega, edita o elimina desde otro celular,
-     * Firebase actualiza los arrays y llama render().
-     ************************************************************/
-    function startRealtimeListeners() {
-      const activitiesQuery = query(collection(db, "activities"), orderBy("day", "asc"), orderBy("time", "asc"));
-      const recommendationsQuery = query(collection(db, "recommendations"), orderBy("votes", "desc"));
-
-      onSnapshot(activitiesQuery, (snapshot) => {
-        activities = snapshot.docs.map((item) => ({
-          id: item.id,
-          ...item.data()
-        }));
-        render();
-      }, (error) => {
-        console.error(error);
-        showToast("Error leyendo actividades. Revisa reglas/índices de Firestore.");
-      });
-
-      onSnapshot(recommendationsQuery, (snapshot) => {
-        recommendations = snapshot.docs.map((item) => ({
-          id: item.id,
-          ...item.data()
-        }));
-        render();
-      }, (error) => {
-        console.error(error);
-        showToast("Error leyendo recomendaciones. Revisa reglas de Firestore.");
-      });
+      setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
     function initSelects() {
@@ -621,6 +566,42 @@
         opt2.value = day.id;
         opt2.textContent = `${day.label} · ${day.subtitle}`;
         activityDay.appendChild(opt2);
+      });
+    }
+
+    function initFirebase() {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        firebaseReady = true;
+        startRealtimeListeners();
+      } catch (error) {
+        console.error("Error iniciando Firebase:", error);
+        $("firebaseWarning").classList.add("show");
+        showToast("Firebase no conectó. Revisa la consola.");
+      }
+    }
+
+    function startRealtimeListeners() {
+      const activitiesQuery = query(collection(db, "activities"), orderBy("day", "asc"), orderBy("time", "asc"));
+      const recommendationsQuery = query(collection(db, "recommendations"), orderBy("votes", "desc"));
+
+      onSnapshot(activitiesQuery, (snapshot) => {
+        activities = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+        render();
+      }, (error) => {
+        console.error("Error leyendo activities:", error);
+        $("firebaseWarning").classList.add("show");
+        showToast("Error leyendo actividades. Revisa Rules o índice.");
+      });
+
+      onSnapshot(recommendationsQuery, (snapshot) => {
+        recommendations = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+        render();
+      }, (error) => {
+        console.error("Error leyendo recommendations:", error);
+        $("firebaseWarning").classList.add("show");
+        showToast("Error leyendo recomendaciones. Revisa Rules.");
       });
     }
 
@@ -641,7 +622,9 @@
       const container = $("daysContainer");
       container.innerHTML = "";
 
-      const visibleDays = selectedDay === "all" ? tripDays : tripDays.filter(day => day.id === selectedDay);
+      const visibleDays = selectedDay === "all"
+        ? tripDays
+        : tripDays.filter(day => day.id === selectedDay);
 
       visibleDays.forEach(day => {
         const dayActivities = activities
@@ -660,7 +643,9 @@
             <span class="pill">${dayActivities.length} actividad(es)</span>
           </div>
           <div class="activity-list">
-            ${dayActivities.length ? dayActivities.map(activity => activityTemplate(activity)).join("") : `<div class="empty">Todavía no hay actividades para este día.</div>`}
+            ${dayActivities.length
+              ? dayActivities.map(activity => activityTemplate(activity)).join("")
+              : `<div class="empty">Todavía no hay actividades para este día.</div>`}
           </div>
         `;
 
@@ -722,8 +707,9 @@
     }
 
     function requireFirebase() {
-      if (!firebaseReady) {
-        showToast("Primero configura Firebase.");
+      if (!firebaseReady || !db) {
+        $("firebaseWarning").classList.add("show");
+        showToast("Firebase no está conectado.");
         return false;
       }
       return true;
@@ -775,7 +761,7 @@
             ...payload,
             createdAt: serverTimestamp()
           });
-          showToast("Actividad agregada al horario.");
+          showToast("Actividad agregada.");
         }
 
         if (recommendationToScheduleId) {
@@ -787,8 +773,8 @@
 
         closeActivityModal();
       } catch (error) {
-        console.error(error);
-        showToast("No se pudo guardar. Revisa Firestore.");
+        console.error("Error guardando actividad:", error);
+        showToast("No se pudo guardar. Revisa Firestore Rules.");
       }
     }
 
@@ -805,8 +791,8 @@
         await deleteDoc(doc(db, "activities", id));
         showToast("Actividad eliminada.");
       } catch (error) {
-        console.error(error);
-        showToast("No se pudo eliminar la actividad.");
+        console.error("Error eliminando actividad:", error);
+        showToast("No se pudo eliminar.");
       }
     }
 
@@ -847,8 +833,8 @@
         closeRecommendationModal();
         showToast("Recomendación guardada.");
       } catch (error) {
-        console.error(error);
-        showToast("No se pudo guardar la recomendación.");
+        console.error("Error guardando recomendación:", error);
+        showToast("No se pudo guardar recomendación.");
       }
     }
 
@@ -861,7 +847,7 @@
           updatedAt: serverTimestamp()
         });
       } catch (error) {
-        console.error(error);
+        console.error("Error votando:", error);
         showToast("No se pudo votar.");
       }
     }
@@ -887,8 +873,8 @@
         await deleteDoc(doc(db, "recommendations", id));
         showToast("Recomendación eliminada.");
       } catch (error) {
-        console.error(error);
-        showToast("No se pudo eliminar la recomendación.");
+        console.error("Error eliminando recomendación:", error);
+        showToast("No se pudo eliminar recomendación.");
       }
     }
 
@@ -925,12 +911,6 @@
       if (event.target === $("recommendationModal")) closeRecommendationModal();
     });
 
-    /************************************************************
-     * 3) EXPONER FUNCIONES AL HTML
-     *
-     * Como usamos type="module", las funciones no quedan globales.
-     * Por eso las asignamos a window.
-     ************************************************************/
     window.openActivityModal = openActivityModal;
     window.closeActivityModal = closeActivityModal;
     window.saveActivity = saveActivity;
@@ -946,24 +926,8 @@
     window.render = render;
 
     initSelects();
+    render();
     initFirebase();
-
-    /************************************************************
-     * 4) REGLAS TEMPORALES PARA FIRESTORE
-     *
-     * En Firebase Console > Firestore Database > Rules puedes usar
-     * esto SOLO para pruebas familiares. No lo dejes así para una
-     * app pública grande.
-     *
-     * rules_version = '2';
-     * service cloud.firestore {
-     *   match /databases/{database}/documents {
-     *     match /{document=**} {
-     *       allow read, write: if true;
-     *     }
-     *   }
-     * }
-     ************************************************************/
   </script>
 </body>
 </html>
