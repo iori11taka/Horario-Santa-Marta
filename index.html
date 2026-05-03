@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Santa Marta Planner Pro</title>
+  <title>Santa Marta Planner Pro Firebase</title>
   <style>
     :root {
       --bg: #07111f;
@@ -35,14 +35,8 @@
         url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80") center/cover fixed;
     }
 
-    button, input, select, textarea {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-    }
+    button, input, select, textarea { font: inherit; }
+    button { border: 0; cursor: pointer; }
 
     .app {
       width: min(1380px, 94vw);
@@ -131,9 +125,7 @@
       transition: transform 0.2s, opacity 0.2s, background 0.2s;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-    }
+    .btn:hover { transform: translateY(-2px); }
 
     .btn.secondary {
       color: var(--text);
@@ -141,14 +133,8 @@
       border: 1px solid var(--line);
     }
 
-    .btn.green {
-      background: var(--green);
-    }
-
-    .btn.red {
-      background: var(--red);
-      color: white;
-    }
+    .btn.green { background: var(--green); }
+    .btn.red { background: var(--red); color: white; }
 
     .stats {
       position: relative;
@@ -173,9 +159,7 @@
       margin-bottom: 8px;
     }
 
-    .stat strong {
-      font-size: 26px;
-    }
+    .stat strong { font-size: 26px; }
 
     .layout {
       display: grid;
@@ -203,15 +187,8 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
-    .panel-head h2 {
-      font-size: 18px;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .panel-head h2 { font-size: 18px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 10px; }
 
     select, input, textarea {
       width: 100%;
@@ -223,14 +200,8 @@
       outline: none;
     }
 
-    textarea {
-      min-height: 88px;
-      resize: vertical;
-    }
-
-    select option {
-      background: #0f172a;
-    }
+    textarea { min-height: 88px; resize: vertical; }
+    select option { background: #0f172a; }
 
     .days {
       display: grid;
@@ -254,15 +225,8 @@
       background: rgba(255, 255, 255, 0.055);
     }
 
-    .day-title strong {
-      font-size: 17px;
-    }
-
-    .day-title small {
-      display: block;
-      color: var(--muted);
-      margin-top: 3px;
-    }
+    .day-title strong { font-size: 17px; }
+    .day-title small { display: block; color: var(--muted); margin-top: 3px; }
 
     .pill {
       display: inline-flex;
@@ -293,26 +257,12 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .time {
-      font-weight: 900;
-      color: var(--blue);
-    }
+    .time { font-weight: 900; color: var(--blue); }
 
-    .activity h3 {
-      font-size: 15px;
-      margin-bottom: 3px;
-    }
+    .activity h3 { font-size: 15px; margin-bottom: 3px; }
+    .activity p { color: var(--muted); font-size: 13px; line-height: 1.45; }
 
-    .activity p {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .mini-actions {
-      display: flex;
-      gap: 6px;
-    }
+    .mini-actions { display: flex; gap: 6px; }
 
     .icon-btn {
       width: 34px;
@@ -323,21 +273,9 @@
       border: 1px solid var(--line);
     }
 
-    .side-content {
-      display: grid;
-      gap: 16px;
-      padding: 18px;
-    }
-
-    .form-grid {
-      display: grid;
-      gap: 10px;
-    }
-
-    .rec-list {
-      display: grid;
-      gap: 10px;
-    }
+    .side-content { display: grid; gap: 16px; padding: 18px; }
+    .form-grid { display: grid; gap: 10px; }
+    .rec-list { display: grid; gap: 10px; }
 
     .rec-card {
       border: 1px solid var(--line);
@@ -353,16 +291,8 @@
       align-items: flex-start;
     }
 
-    .rec-card h3 {
-      font-size: 15px;
-    }
-
-    .rec-card p {
-      margin-top: 6px;
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: 13px;
-    }
+    .rec-card h3 { font-size: 15px; }
+    .rec-card p { margin-top: 6px; color: var(--muted); line-height: 1.45; font-size: 13px; }
 
     .vote {
       display: inline-flex;
@@ -393,15 +323,8 @@
       border: 1px solid var(--line);
     }
 
-    .small-btn.primary {
-      color: #06101e;
-      background: var(--blue);
-    }
-
-    .small-btn.green {
-      color: #06101e;
-      background: var(--green);
-    }
+    .small-btn.primary { color: #06101e; background: var(--blue); }
+    .small-btn.green { color: #06101e; background: var(--green); }
 
     .empty {
       padding: 18px;
@@ -423,9 +346,7 @@
       z-index: 50;
     }
 
-    .modal.show {
-      display: flex;
-    }
+    .modal.show { display: flex; }
 
     .modal-card {
       width: min(560px, 100%);
@@ -436,9 +357,7 @@
       padding: 20px;
     }
 
-    .modal-card h2 {
-      margin-bottom: 14px;
-    }
+    .modal-card h2 { margin-bottom: 14px; }
 
     .modal-actions {
       display: flex;
@@ -468,34 +387,28 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+    .firebase-warning {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(251, 113, 133, 0.35);
+      background: rgba(251, 113, 133, 0.1);
+      color: #fecdd3;
+      display: none;
+    }
 
-      .stats {
-        grid-template-columns: repeat(3, 1fr);
-        width: 100%;
-      }
+    .firebase-warning.show { display: block; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(3, 1fr); width: 100%; }
     }
 
     @media (max-width: 640px) {
-      .hero {
-        padding: 22px;
-        border-radius: 26px;
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .activity {
-        grid-template-columns: 1fr;
-      }
-
-      .mini-actions {
-        justify-content: flex-end;
-      }
+      .hero { padding: 22px; border-radius: 26px; }
+      .stats { grid-template-columns: 1fr; }
+      .activity { grid-template-columns: 1fr; }
+      .mini-actions { justify-content: flex-end; }
     }
   </style>
 </head>
@@ -508,13 +421,15 @@
           <h1>Planner interactivo para Santa Marta</h1>
           <p>
             Organiza el horario del viaje, agrega recomendaciones familiares y conviértelas en actividades oficiales del itinerario.
-            Todo se guarda en este navegador mediante localStorage, ideal para probar en VS Code y subir a GitHub/Vercel.
+            Esta versión usa Firebase Firestore para sincronizar cambios entre celulares en tiempo real.
           </p>
+          <div id="firebaseWarning" class="firebase-warning">
+            ⚠️ Falta configurar Firebase. Reemplaza el objeto <strong>firebaseConfig</strong> en el código con el de tu proyecto.
+          </div>
           <div class="hero-actions">
             <button class="btn" onclick="openActivityModal()">＋ Agregar actividad</button>
             <button class="btn secondary" onclick="openRecommendationModal()">💡 Recomendar plan</button>
             <button class="btn secondary" onclick="exportData()">⬇ Exportar JSON</button>
-            <button class="btn red" onclick="resetPlanner()">Reiniciar</button>
           </div>
         </div>
 
@@ -589,7 +504,36 @@
 
   <div class="toast" id="toast"></div>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      doc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    /************************************************************
+     * 1) PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE
+     *
+     * Firebase Console > Project settings > General > Your apps
+     * Crea una app Web y copia el objeto firebaseConfig.
+     ************************************************************/
+    const firebaseConfig = {
+      apiKey: "PEGA_AQUI_TU_API_KEY",
+      authDomain: "PEGA_AQUI_TU_AUTH_DOMAIN",
+      projectId: "PEGA_AQUI_TU_PROJECT_ID",
+      storageBucket: "PEGA_AQUI_TU_STORAGE_BUCKET",
+      messagingSenderId: "PEGA_AQUI_TU_MESSAGING_SENDER_ID",
+      appId: "PEGA_AQUI_TU_APP_ID"
+    };
+
     const tripDays = [
       { id: "2026-05-16", label: "Sábado 16", subtitle: "Llegada aprox. 8:00 pm", limited: true },
       { id: "2026-05-17", label: "Domingo 17", subtitle: "Día completo" },
@@ -601,58 +545,17 @@
       { id: "2026-05-23", label: "Sábado 23", subtitle: "Vuelo 3:00 pm, aprovechar solo mañana", limited: true }
     ];
 
-    const defaultActivities = [
-      {
-        id: crypto.randomUUID(),
-        day: "2026-05-16",
-        time: "20:00",
-        title: "Llegada a Santa Marta",
-        notes: "Check-in, cena tranquila cerca del hospedaje y descanso."
-      },
-      {
-        id: crypto.randomUUID(),
-        day: "2026-05-17",
-        time: "09:00",
-        title: "Mañana de playa suave",
-        notes: "Primer día para adaptarse, caminar y revisar opciones reales con la familia."
-      },
-      {
-        id: crypto.randomUUID(),
-        day: "2026-05-23",
-        time: "09:00",
-        title: "Desayuno + maletas",
-        notes: "Plan corto. Dejar margen para traslado al aeropuerto por el vuelo de 3:00 pm."
-      }
-    ];
-
-    let activities = JSON.parse(localStorage.getItem("sm_activities")) || defaultActivities;
-    let recommendations = JSON.parse(localStorage.getItem("sm_recommendations")) || [
-      {
-        id: crypto.randomUUID(),
-        name: "Idea base",
-        title: "Paseo por el centro histórico",
-        notes: "Bueno para una tarde/noche tranquila, fotos y cena familiar.",
-        votes: 2,
-        added: false
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Idea base",
-        title: "Playa o paseo en lancha",
-        notes: "Ideal para uno de los días completos. Validar clima y disponibilidad.",
-        votes: 3,
-        added: false
-      }
-    ];
-
+    let db = null;
+    let activities = [];
+    let recommendations = [];
     let editingActivityId = null;
     let recommendationToScheduleId = null;
+    let firebaseReady = false;
 
     const $ = (id) => document.getElementById(id);
 
-    function saveState() {
-      localStorage.setItem("sm_activities", JSON.stringify(activities));
-      localStorage.setItem("sm_recommendations", JSON.stringify(recommendations));
+    function isFirebaseConfigured() {
+      return firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("PEGA_AQUI");
     }
 
     function showToast(message) {
@@ -660,6 +563,54 @@
       toast.textContent = message;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function initFirebase() {
+      if (!isFirebaseConfigured()) {
+        $("firebaseWarning").classList.add("show");
+        showToast("Falta configurar Firebase.");
+        render();
+        return;
+      }
+
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      firebaseReady = true;
+      startRealtimeListeners();
+    }
+
+    /************************************************************
+     * 2) LISTENERS EN TIEMPO REAL
+     *
+     * Estos listeners son lo más importante.
+     * Cuando alguien agrega, edita o elimina desde otro celular,
+     * Firebase actualiza los arrays y llama render().
+     ************************************************************/
+    function startRealtimeListeners() {
+      const activitiesQuery = query(collection(db, "activities"), orderBy("day", "asc"), orderBy("time", "asc"));
+      const recommendationsQuery = query(collection(db, "recommendations"), orderBy("votes", "desc"));
+
+      onSnapshot(activitiesQuery, (snapshot) => {
+        activities = snapshot.docs.map((item) => ({
+          id: item.id,
+          ...item.data()
+        }));
+        render();
+      }, (error) => {
+        console.error(error);
+        showToast("Error leyendo actividades. Revisa reglas/índices de Firestore.");
+      });
+
+      onSnapshot(recommendationsQuery, (snapshot) => {
+        recommendations = snapshot.docs.map((item) => ({
+          id: item.id,
+          ...item.data()
+        }));
+        render();
+      }, (error) => {
+        console.error(error);
+        showToast("Error leyendo recomendaciones. Revisa reglas de Firestore.");
+      });
     }
 
     function initSelects() {
@@ -683,7 +634,6 @@
       renderStats();
       renderDays();
       renderRecommendations();
-      saveState();
     }
 
     function renderStats() {
@@ -702,7 +652,7 @@
       visibleDays.forEach(day => {
         const dayActivities = activities
           .filter(activity => activity.day === day.id)
-          .sort((a, b) => a.time.localeCompare(b.time));
+          .sort((a, b) => String(a.time || "").localeCompare(String(b.time || "")));
 
         const card = document.createElement("article");
         card.className = "day-card";
@@ -727,7 +677,7 @@
     function activityTemplate(activity) {
       return `
         <div class="activity">
-          <div class="time">${activity.time || "--:--"}</div>
+          <div class="time">${escapeHTML(activity.time || "--:--")}</div>
           <div>
             <h3>${escapeHTML(activity.title)}</h3>
             <p>${escapeHTML(activity.notes || "Sin notas")}</p>
@@ -745,7 +695,7 @@
       const container = $("recommendationsContainer");
       container.innerHTML = "";
 
-      let list = [...recommendations].sort((a, b) => b.votes - a.votes);
+      let list = [...recommendations].sort((a, b) => Number(b.votes || 0) - Number(a.votes || 0));
 
       if (filter === "pending") list = list.filter(rec => !rec.added);
       if (filter === "added") list = list.filter(rec => rec.added);
@@ -765,7 +715,7 @@
               <p>${escapeHTML(rec.notes || "Sin descripción")}</p>
               <p><strong>Por:</strong> ${escapeHTML(rec.name || "Anónimo")}</p>
             </div>
-            <button class="vote" onclick="voteRecommendation('${rec.id}')">★ ${rec.votes}</button>
+            <button class="vote" onclick="voteRecommendation('${rec.id}', ${Number(rec.votes || 0)})">★ ${Number(rec.votes || 0)}</button>
           </div>
           <div class="rec-actions">
             <button class="small-btn primary" onclick="scheduleRecommendation('${rec.id}')">Agregar al horario</button>
@@ -775,6 +725,14 @@
         `;
         container.appendChild(card);
       });
+    }
+
+    function requireFirebase() {
+      if (!firebaseReady) {
+        showToast("Primero configura Firebase.");
+        return false;
+      }
+      return true;
     }
 
     function openActivityModal(prefill = {}) {
@@ -793,7 +751,9 @@
       $("activityModal").classList.remove("show");
     }
 
-    function saveActivity() {
+    async function saveActivity() {
+      if (!requireFirebase()) return;
+
       const day = $("activityDay").value;
       const time = $("activityTime").value;
       const title = $("activityTitle").value.trim();
@@ -804,20 +764,38 @@
         return;
       }
 
-      if (editingActivityId) {
-        activities = activities.map(activity => activity.id === editingActivityId ? { ...activity, day, time, title, notes } : activity);
-        showToast("Actividad actualizada.");
-      } else {
-        activities.push({ id: crypto.randomUUID(), day, time, title, notes });
-        showToast("Actividad agregada al horario.");
-      }
+      const payload = {
+        day,
+        time,
+        title,
+        notes,
+        updatedAt: serverTimestamp()
+      };
 
-      if (recommendationToScheduleId) {
-        recommendations = recommendations.map(rec => rec.id === recommendationToScheduleId ? { ...rec, added: true } : rec);
-      }
+      try {
+        if (editingActivityId) {
+          await updateDoc(doc(db, "activities", editingActivityId), payload);
+          showToast("Actividad actualizada.");
+        } else {
+          await addDoc(collection(db, "activities"), {
+            ...payload,
+            createdAt: serverTimestamp()
+          });
+          showToast("Actividad agregada al horario.");
+        }
 
-      closeActivityModal();
-      render();
+        if (recommendationToScheduleId) {
+          await updateDoc(doc(db, "recommendations", recommendationToScheduleId), {
+            added: true,
+            updatedAt: serverTimestamp()
+          });
+        }
+
+        closeActivityModal();
+      } catch (error) {
+        console.error(error);
+        showToast("No se pudo guardar. Revisa Firestore.");
+      }
     }
 
     function editActivity(id) {
@@ -825,11 +803,17 @@
       if (activity) openActivityModal(activity);
     }
 
-    function deleteActivity(id) {
+    async function deleteActivity(id) {
+      if (!requireFirebase()) return;
       if (!confirm("¿Eliminar esta actividad?")) return;
-      activities = activities.filter(activity => activity.id !== id);
-      render();
-      showToast("Actividad eliminada.");
+
+      try {
+        await deleteDoc(doc(db, "activities", id));
+        showToast("Actividad eliminada.");
+      } catch (error) {
+        console.error(error);
+        showToast("No se pudo eliminar la actividad.");
+      }
     }
 
     function openRecommendationModal() {
@@ -843,7 +827,9 @@
       $("recommendationModal").classList.remove("show");
     }
 
-    function saveRecommendation() {
+    async function saveRecommendation() {
+      if (!requireFirebase()) return;
+
       const name = $("recName").value.trim() || "Anónimo";
       const title = $("recTitle").value.trim();
       const notes = $("recNotes").value.trim();
@@ -853,23 +839,37 @@
         return;
       }
 
-      recommendations.push({
-        id: crypto.randomUUID(),
-        name,
-        title,
-        notes,
-        votes: 1,
-        added: false
-      });
+      try {
+        await addDoc(collection(db, "recommendations"), {
+          name,
+          title,
+          notes,
+          votes: 1,
+          added: false,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
 
-      closeRecommendationModal();
-      render();
-      showToast("Recomendación guardada.");
+        closeRecommendationModal();
+        showToast("Recomendación guardada.");
+      } catch (error) {
+        console.error(error);
+        showToast("No se pudo guardar la recomendación.");
+      }
     }
 
-    function voteRecommendation(id) {
-      recommendations = recommendations.map(rec => rec.id === id ? { ...rec, votes: rec.votes + 1 } : rec);
-      render();
+    async function voteRecommendation(id, currentVotes) {
+      if (!requireFirebase()) return;
+
+      try {
+        await updateDoc(doc(db, "recommendations", id), {
+          votes: Number(currentVotes || 0) + 1,
+          updatedAt: serverTimestamp()
+        });
+      } catch (error) {
+        console.error(error);
+        showToast("No se pudo votar.");
+      }
     }
 
     function scheduleRecommendation(id) {
@@ -885,11 +885,17 @@
       });
     }
 
-    function deleteRecommendation(id) {
+    async function deleteRecommendation(id) {
+      if (!requireFirebase()) return;
       if (!confirm("¿Eliminar esta recomendación?")) return;
-      recommendations = recommendations.filter(rec => rec.id !== id);
-      render();
-      showToast("Recomendación eliminada.");
+
+      try {
+        await deleteDoc(doc(db, "recommendations", id));
+        showToast("Recomendación eliminada.");
+      } catch (error) {
+        console.error(error);
+        showToast("No se pudo eliminar la recomendación.");
+      }
     }
 
     function exportData() {
@@ -897,7 +903,8 @@
         trip: "Santa Marta 2026",
         days: tripDays,
         activities,
-        recommendations
+        recommendations,
+        exportedAt: new Date().toISOString()
       };
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -910,18 +917,8 @@
       showToast("Archivo exportado.");
     }
 
-    function resetPlanner() {
-      if (!confirm("Esto borrará actividades y recomendaciones guardadas en este navegador. ¿Continuar?")) return;
-      localStorage.removeItem("sm_activities");
-      localStorage.removeItem("sm_recommendations");
-      activities = defaultActivities;
-      recommendations = [];
-      render();
-      showToast("Planner reiniciado.");
-    }
-
     function escapeHTML(value) {
-      return String(value)
+      return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
@@ -934,8 +931,45 @@
       if (event.target === $("recommendationModal")) closeRecommendationModal();
     });
 
+    /************************************************************
+     * 3) EXPONER FUNCIONES AL HTML
+     *
+     * Como usamos type="module", las funciones no quedan globales.
+     * Por eso las asignamos a window.
+     ************************************************************/
+    window.openActivityModal = openActivityModal;
+    window.closeActivityModal = closeActivityModal;
+    window.saveActivity = saveActivity;
+    window.editActivity = editActivity;
+    window.deleteActivity = deleteActivity;
+    window.openRecommendationModal = openRecommendationModal;
+    window.closeRecommendationModal = closeRecommendationModal;
+    window.saveRecommendation = saveRecommendation;
+    window.voteRecommendation = voteRecommendation;
+    window.scheduleRecommendation = scheduleRecommendation;
+    window.deleteRecommendation = deleteRecommendation;
+    window.exportData = exportData;
+    window.render = render;
+
     initSelects();
-    render();
+    initFirebase();
+
+    /************************************************************
+     * 4) REGLAS TEMPORALES PARA FIRESTORE
+     *
+     * En Firebase Console > Firestore Database > Rules puedes usar
+     * esto SOLO para pruebas familiares. No lo dejes así para una
+     * app pública grande.
+     *
+     * rules_version = '2';
+     * service cloud.firestore {
+     *   match /databases/{database}/documents {
+     *     match /{document=**} {
+     *       allow read, write: if true;
+     *     }
+     *   }
+     * }
+     ************************************************************/
   </script>
 </body>
 </html>
